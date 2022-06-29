@@ -3,35 +3,37 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.validation.UserValidation;
+import ru.yandex.practicum.filmorate.validation.DataValidation;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.*;
 
 @RestController
 @Slf4j
 @RequestMapping(value = "/users")
-public class UserController {
+public class UserController extends DataValidation<User> {
 
-    private static int userId = 0;
+    private static Integer userId = 0;
     private final Map<Integer, User> users = new TreeMap<>();
-    private final UserValidation validation = new UserValidation();
 
-    private static int generateId() {
+    private static Integer generateId() {
         return ++userId;
     }
 
     @GetMapping
-    public Collection<User> getUsers() {
+    public List<User> getUsers() {
         log.info("Текущее количество пользователей: {}", users.size());
-        return users.values();
+        log.info("{}", users.values());
+        return new ArrayList<>(users.values());
     }
 
     @PostMapping
     public User addUser(@Valid @RequestBody User user) {
         user.setId(generateId());
-        validation.validateUser(user);
+        validate(user);
         users.put(user.getId(), user);
         log.info("Добавлен пользователь: {}", user);
         return user;
@@ -39,9 +41,25 @@ public class UserController {
 
     @PutMapping
     public User updateUser(@Valid @RequestBody User user) {
-        validation.validateUser(user);
+        validate(user);
         users.put(user.getId(), user);
         log.info("Обновлён пользователь {}", user);
         return user;
+    }
+
+    @Override
+    public void validate(User user) {
+        if(user.getId() < 1) {
+            log.error("Id меньше, чем 1");
+            throw new ValidationException("id не может быть меньше 1");
+        }
+        if (user.getName().equals("")) {
+            log.error("Name не может быть \"\"");
+            user.setName(user.getLogin());
+        }
+        if(user.getBirthday().isAfter(LocalDate.now())) {
+            log.error("Дата рождения позже, чем текущая дата");
+            throw new ValidationException("Дата рождения не может быть позже текущей даты");
+        }
     }
 }
