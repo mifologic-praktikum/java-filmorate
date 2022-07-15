@@ -27,10 +27,10 @@ public class UserControllerTest {
     @Test
     public void userNameChangeToLoginIfUserNameIsEmptySting() {
         User user = new User();
-        user.setId(0L);
+        user.setId(2L);
         user.setEmail("mail@yandex.ru");
-        user.setName("BethG");
-        user.setLogin("");
+        user.setName("");
+        user.setLogin("Beth");
         user.setBirthday(LocalDate.of(1964, Month.MARCH, 15));
         UserController uc = new UserController();
         uc.validate(user);
@@ -40,7 +40,7 @@ public class UserControllerTest {
     @Test
     public void userBirthDayDateCantBeInFuture() {
         User user = new User();
-        user.setId(0L);
+        user.setId(3L);
         user.setEmail("mail@yandex.ru");
         user.setName("BethG");
         user.setLogin("");

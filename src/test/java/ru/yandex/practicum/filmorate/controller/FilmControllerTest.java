@@ -28,7 +28,7 @@ public class FilmControllerTest {
     @Test
     public void filmDateCantBeEarly1895() {
         Film film = new Film();
-        film.setId(0L);
+        film.setId(2L);
         film.setName("Nosferatu");
         film.setDescription("Film about vampires");
         film.setReleaseDate(LocalDate.of(1822, Month.MARCH, 15));
