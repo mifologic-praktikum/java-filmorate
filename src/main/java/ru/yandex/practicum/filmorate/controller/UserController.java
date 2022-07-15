@@ -2,9 +2,11 @@ package ru.yandex.practicum.filmorate.controller;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.user.UserService;
 import ru.yandex.practicum.filmorate.validation.DataValidation;
 
 import javax.validation.Valid;
@@ -14,42 +16,64 @@ import java.util.*;
 @RestController
 @Slf4j
 @RequestMapping(value = "/users")
-public class UserController extends DataValidation<User> {
+public class UserController implements DataValidation<User> {
 
-    private static Integer userId = 0;
-    private final Map<Integer, User> users = new TreeMap<>();
-
-    private static Integer generateId() {
-        return ++userId;
-    }
+    @Autowired
+    UserService userService;
 
     @GetMapping
-    public List<User> getUsers() {
-        log.info("Текущее количество пользователей: {}", users.size());
-        log.info("{}", users.values());
-        return new ArrayList<>(users.values());
+    public List<User> findUsers() {
+        List<User> users = userService.findUsers();
+        log.info("Current users count: {}", users.size());
+        log.info("{}", users);
+        return users;
+    }
+
+    @GetMapping("/{userId}")
+    public User findUserById(@PathVariable Long userId) {
+        log.info("Get user by id={}", userId);
+        return userService.findUserById(userId);
     }
 
     @PostMapping
     public User addUser(@Valid @RequestBody User user) {
-        user.setId(generateId());
-        validate(user);
-        users.put(user.getId(), user);
-        log.info("Добавлен пользователь: {}", user);
-        return user;
+        log.info("Add user with data: {}", user);
+        return userService.addUser(user);
     }
 
     @PutMapping
     public User updateUser(@Valid @RequestBody User user) {
-        validate(user);
-        users.put(user.getId(), user);
-        log.info("Обновлён пользователь {}", user);
-        return user;
+        log.info("Update user with data: {}", user);
+        return userService.updateUser(user);
+    }
+
+    @PutMapping("/{userId}/friends/{friendId}")
+    public void addFriend(@PathVariable Long userId, @PathVariable Long friendId) {
+        log.info("Add friend with id=" + friendId + " to user with id=" + userId);
+        userService.addFriend(userId, friendId);
+    }
+
+    @DeleteMapping("/{userId}/friends/{friendId}")
+    public void deleteFriend(@PathVariable Long userId, @PathVariable Long friendId) {
+        log.info("Delete friend with id=" + friendId + " from user with id=" + userId);
+        userService.removeFriend(userId, friendId);
+    }
+
+    @GetMapping("{userId}/friends")
+    public List<User> findUserFriends(@PathVariable Long userId) {
+        log.info("Find friends for user with id=" + userId);
+        return userService.findUserFriends(userId);
+    }
+
+    @GetMapping("{userId}/friends/common/{otherUserId}")
+    public List<User> findCommonFriends(@PathVariable Long userId, @PathVariable Long otherUserId) {
+        log.info("Find common friends for users with ids=" + userId + ", " + otherUserId);
+        return userService.findCommonFriends(userId, otherUserId);
     }
 
     @Override
     public void validate(User user) {
-        if(user.getId() < 1) {
+        if (user.getId() < 1) {
             log.error("Id меньше, чем 1");
             throw new ValidationException("id не может быть меньше 1");
         }
@@ -57,7 +81,7 @@ public class UserController extends DataValidation<User> {
             log.error("Name не может быть \"\"");
             user.setName(user.getLogin());
         }
-        if(user.getBirthday().isAfter(LocalDate.now())) {
+        if (user.getBirthday().isAfter(LocalDate.now())) {
             log.error("Дата рождения позже, чем текущая дата");
             throw new ValidationException("Дата рождения не может быть позже текущей даты");
         }
