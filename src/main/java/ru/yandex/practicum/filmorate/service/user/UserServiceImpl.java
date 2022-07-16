@@ -1,18 +1,20 @@
 package ru.yandex.practicum.filmorate.service.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    InMemoryUserStorage userStorage;
+    private final UserStorage userStorage;
+
+    public UserServiceImpl(UserStorage userStorage) {
+        this.userStorage = userStorage;
+    }
 
     @Override
     public List<User> findUsers() {

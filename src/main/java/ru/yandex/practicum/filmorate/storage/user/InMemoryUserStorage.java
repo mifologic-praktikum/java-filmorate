@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 @Component
 public class InMemoryUserStorage implements UserStorage {
 
-    private static Long userId = 0L;
-    private final Map<Long, User> users = new TreeMap<>();
+    private Long userId = 0L;
+    private final Map<Long, User> users = new HashMap<>();
 
     @Override
     public List<User> findUsers() {

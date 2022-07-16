@@ -3,6 +3,10 @@ package ru.yandex.practicum.filmorate.controller;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.user.UserService;
+import ru.yandex.practicum.filmorate.service.user.UserServiceImpl;
+import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -12,6 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserControllerTest {
 
+    private final UserStorage userStorage = new InMemoryUserStorage();
+    private final UserService userService = new UserServiceImpl(userStorage);
+
     @Test
     public void userIdCantBeLessThan1() {
         User user = new User();
@@ -20,7 +27,7 @@ public class UserControllerTest {
         user.setName("BethG");
         user.setLogin("Beth");
         user.setBirthday(LocalDate.of(1964, Month.MARCH, 15));
-        UserController uc = new UserController();
+        UserController uc = new UserController(userService);
         assertThrows(ValidationException.class, () -> uc.validate(user));
     }
 
@@ -32,7 +39,7 @@ public class UserControllerTest {
         user.setName("");
         user.setLogin("Beth");
         user.setBirthday(LocalDate.of(1964, Month.MARCH, 15));
-        UserController uc = new UserController();
+        UserController uc = new UserController(userService);
         uc.validate(user);
         assertEquals(user.getName(), user.getLogin());
     }
@@ -45,7 +52,7 @@ public class UserControllerTest {
         user.setName("BethG");
         user.setLogin("");
         user.setBirthday(LocalDate.of(2964, Month.MARCH, 15));
-        UserController uc = new UserController();
+        UserController uc = new UserController(userService);
         assertThrows(ValidationException.class, () -> uc.validate(user));
     }
 }

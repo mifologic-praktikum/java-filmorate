@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.controller;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -18,8 +17,11 @@ import java.util.*;
 @RequestMapping(value = "/users")
 public class UserController implements DataValidation<User> {
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     public List<User> findUsers() {
@@ -59,13 +61,13 @@ public class UserController implements DataValidation<User> {
         userService.removeFriend(userId, friendId);
     }
 
-    @GetMapping("{userId}/friends")
+    @GetMapping("/{userId}/friends")
     public List<User> findUserFriends(@PathVariable Long userId) {
         log.info("Find friends for user with id=" + userId);
         return userService.findUserFriends(userId);
     }
 
-    @GetMapping("{userId}/friends/common/{otherUserId}")
+    @GetMapping("/{userId}/friends/common/{otherUserId}")
     public List<User> findCommonFriends(@PathVariable Long userId, @PathVariable Long otherUserId) {
         log.info("Find common friends for users with ids=" + userId + ", " + otherUserId);
         return userService.findCommonFriends(userId, otherUserId);

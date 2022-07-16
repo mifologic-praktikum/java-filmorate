@@ -10,12 +10,8 @@ import java.util.stream.Collectors;
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
 
-    private static Long filmId = 0L;
-    private final Map<Long, Film> films = new TreeMap<>();
-
-    private static Long generateId() {
-        return ++filmId;
-    }
+    private Long filmId = 0L;
+    private final Map<Long, Film> films = new HashMap<>();
 
     @Override
     public Film findFilmById(Long filmId) {
@@ -29,7 +25,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film addFilm(Film film) {
-        film.setId(generateId());
+        film.setId(++filmId);
         films.put(film.getId(), film);
         return film;
     }
@@ -51,7 +47,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public List<Film> findTopTenFilmsByLikes(int count) {
+    public List<Film> findTopFilmsCountByLikes(int count) {
         return films.values().stream()
                 .sorted(Comparator.comparing(f -> f.getUsersLikes().size(), Comparator.reverseOrder()))
                 .limit(count)
