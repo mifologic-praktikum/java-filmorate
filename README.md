@@ -1,2 +1,6 @@
 # java-filmorate
-Template repository for Filmorate project.
+Проекта курса Java-разработчик "Яндекс.Практикума".
+
+## Схема базы данных
+
+![](//src/main/resources/FilmorateDB_schema.png)
