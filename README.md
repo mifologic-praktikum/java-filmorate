@@ -3,4 +3,4 @@
 
 ## Схема базы данных
 
-![](//src/main/resources/FilmorateDB_schema.png)
+![](/src/main/resources/FilmorateDB_schema.png)
