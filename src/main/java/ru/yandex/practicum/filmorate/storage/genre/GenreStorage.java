@@ -11,9 +11,5 @@ public interface GenreStorage {
     public Optional<Genre> findGenreById(Long id);
 
     public List<Genre> findAllGenres();
-
-    void setFilmGenre(Film film);
-
-    void loadFilmGenre(Film film);
 }
 

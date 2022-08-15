@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 public class MPAServiceImpl implements MPAService {
-    MPADbStorage mpaStorage;
+    private final MPADbStorage mpaStorage;
 
     @Autowired
     public MPAServiceImpl(MPADbStorage mpaStorage) {

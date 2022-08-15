@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 @Component("UserDbStorage")
@@ -22,18 +24,8 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public List<User> findUsers() {
-        List<User> users = new ArrayList<>();
         final String sqlQuery = "SELECT * FROM USERS";
-        SqlRowSet rs = jdbcTemplate.queryForRowSet(sqlQuery);
-        while (rs.next()) {
-            users.add(new User(
-                    rs.getLong("USER_ID"),
-                    rs.getString("EMAIL"),
-                    rs.getString("LOGIN"),
-                    rs.getString("NAME"),
-                    Objects.requireNonNull(rs.getDate("BIRTHDAY")).toLocalDate()));
-        }
-        return users;
+        return jdbcTemplate.query(sqlQuery, (rs, rowNum) -> makeUser(rs));
     }
 
     @Override
@@ -95,35 +87,15 @@ public class UserDbStorage implements UserStorage {
         final String sqlQuery = "SELECT U.USER_ID, U.EMAIL, U.LOGIN, U.NAME, U.BIRTHDAY FROM USERS U " +
                 "JOIN USER_FRIENDS UF on U.USER_ID = UF.FRIEND_ID " +
                 "WHERE UF.USER_ID = ?";
-        SqlRowSet rs = jdbcTemplate.queryForRowSet(sqlQuery, userId);
-        Collection<User> friends = new HashSet<>();
-        while (rs.next()) {
-            friends.add(new User(
-                    rs.getLong("USER_ID"),
-                    rs.getString("EMAIL"),
-                    rs.getString("LOGIN"),
-                    rs.getString("NAME"),
-                    Objects.requireNonNull(rs.getDate("BIRTHDAY")).toLocalDate()));
-        }
-        return friends;
+        return jdbcTemplate.query(sqlQuery, (rs, rowNum) -> makeUser(rs), userId);
     }
 
     @Override
     public List<User> findCommonFriends(Long userId, Long otherUserId) {
-        List<User> users = new ArrayList<>();
         final String sqlQuery = "SELECT U.USER_ID, U.EMAIL, U.LOGIN, U.NAME, U.BIRTHDAY From USERS U " +
                 "WHERE USER_ID IN (SELECT FRIEND_ID FROM USER_FRIENDS UF  where UF.USER_ID = ?) " +
                 "AND USER_ID IN (SELECT FRIEND_ID FROM USER_FRIENDS UF2  where UF2.USER_ID = ?)";
-        SqlRowSet rs = jdbcTemplate.queryForRowSet(sqlQuery, userId, otherUserId);
-        while (rs.next()) {
-            users.add(new User(
-                    rs.getLong("USER_ID"),
-                    rs.getString("EMAIL"),
-                    rs.getString("LOGIN"),
-                    rs.getString("NAME"),
-                    Objects.requireNonNull(rs.getDate("BIRTHDAY")).toLocalDate()));
-        }
-        return users;
+        return jdbcTemplate.query(sqlQuery, (rs, rowNum) -> makeUser(rs), userId, otherUserId);
     }
 
     private Map<String, Object> userToMap(User user) {
@@ -133,5 +105,14 @@ public class UserDbStorage implements UserStorage {
         values.put("NAME", user.getName());
         values.put("BIRTHDAY", user.getBirthday());
         return values;
+    }
+
+    private User makeUser(ResultSet rs) throws SQLException {
+        return new User(
+                rs.getLong("USER_ID"),
+                rs.getString("EMAIL"),
+                rs.getString("LOGIN"),
+                rs.getString("NAME"),
+                Objects.requireNonNull(rs.getDate("BIRTHDAY")).toLocalDate());
     }
 }

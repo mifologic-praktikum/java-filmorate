@@ -16,14 +16,13 @@ public class MPADbStorage implements MPAStorage {
 
     private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
     public MPADbStorage(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
     public Optional<MPA> findRatingById(Long id) {
-        final String sqlQuery = "SELECT RATING_ID, NAME FROM MPA_RATINGS WHERE RATING_ID = ?";
+        String sqlQuery = "SELECT RATING_ID, NAME FROM MPA_RATINGS WHERE RATING_ID = ?";
         SqlRowSet rs = jdbcTemplate.queryForRowSet(sqlQuery, id);
         if (rs.next()) {
             return Optional.of(new MPA(
@@ -35,7 +34,7 @@ public class MPADbStorage implements MPAStorage {
 
     @Override
     public List<MPA> findAllRatings() {
-        final String sqlQuery = "SELECT RATING_ID, NAME FROM MPA_RATINGS";
+        String sqlQuery = "SELECT RATING_ID, NAME FROM MPA_RATINGS";
         return jdbcTemplate.query(sqlQuery, this::mapRowToRating);
     }
 

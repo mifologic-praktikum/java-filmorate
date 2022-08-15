@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.like.LikeStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.time.LocalDate;
@@ -19,11 +20,15 @@ public class FilmServiceImpl implements FilmService {
 
     private final FilmStorage filmStorage;
     private final UserStorage userStorage;
+    private final LikeStorage likeStorage;
 
     @Autowired
-    public FilmServiceImpl(@Qualifier("FilmDbStorage") FilmStorage filmStorage, @Qualifier("UserDbStorage") UserStorage userStorage) {
+    public FilmServiceImpl(@Qualifier("FilmDbStorage") FilmStorage filmStorage,
+                           @Qualifier("UserDbStorage") UserStorage userStorage,
+                           @Qualifier("LikeDbStorage")LikeStorage likeStorage) {
         this.filmStorage = filmStorage;
         this.userStorage = userStorage;
+        this.likeStorage = likeStorage;
     }
 
     @Override
@@ -65,7 +70,7 @@ public class FilmServiceImpl implements FilmService {
         }
         Optional<User> user = userStorage.findUserById(userId);
         if (user.isPresent()) {
-            filmStorage.addLike(filmId, userId);
+            likeStorage.addLike(filmId, userId);
         } else {
             throw new NotFoundException("User with id=" + userId + " not found");
         }
@@ -78,7 +83,7 @@ public class FilmServiceImpl implements FilmService {
         }
         Optional<User> user = userStorage.findUserById(userId);
         if (user.isPresent()) {
-            filmStorage.addLike(filmId, userId);
+            likeStorage.addLike(filmId, userId);
         } else {
             throw new NotFoundException("User with id=" + userId + " not found");
         }

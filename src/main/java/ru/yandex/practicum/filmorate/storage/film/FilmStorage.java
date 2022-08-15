@@ -16,9 +16,9 @@ public interface FilmStorage {
 
     public Film updateFilm(Film film);
 
-    public void addLike(Long filmId, Long userId);
+    void setFilmGenre(Film film);
 
-    public void deleteLike(Long filmId, Long userId);
+    void loadFilmGenre(Film film);
 
     public List<Film> findTopFilmsCountByLikes(int count);
 

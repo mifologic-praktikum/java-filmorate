@@ -12,7 +12,7 @@ import java.util.Optional;
 @Service
 public class GenreServiceImpl implements GenreService {
 
-    GenreDbStorage genreStorage;
+    private final GenreDbStorage genreStorage;
 
     @Autowired
     public GenreServiceImpl(GenreDbStorage genreStorage) {
