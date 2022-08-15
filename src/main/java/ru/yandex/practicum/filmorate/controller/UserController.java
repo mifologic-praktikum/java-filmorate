@@ -34,7 +34,7 @@ public class UserController implements DataValidation<User> {
     }
 
     @GetMapping("/{userId}")
-    public User findUserById(@PathVariable Long userId) {
+    public Optional<User> findUserById(@PathVariable Long userId) {
         log.info("Get user by id={}", userId);
         return userService.findUserById(userId);
     }
@@ -64,7 +64,7 @@ public class UserController implements DataValidation<User> {
     }
 
     @GetMapping("/{userId}/friends")
-    public List<User> findUserFriends(@PathVariable Long userId) {
+    public Collection<User> findUserFriends(@PathVariable Long userId) {
         log.info("Find friends for user with id=" + userId);
         return userService.findUserFriends(userId);
     }

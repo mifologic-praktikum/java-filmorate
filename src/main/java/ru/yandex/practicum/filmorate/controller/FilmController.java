@@ -33,7 +33,7 @@ public class FilmController implements DataValidation<Film> {
     }
 
     @GetMapping("/{filmId}")
-    public Film findFilmById(@PathVariable Long filmId) {
+    public Optional<Film> findFilmById(@PathVariable Long filmId) {
         return filmService.findFilmById(filmId);
     }
 

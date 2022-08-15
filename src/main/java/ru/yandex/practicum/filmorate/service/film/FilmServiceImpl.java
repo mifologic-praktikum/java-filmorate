@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.service.film;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.BadRequestException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
@@ -11,6 +12,7 @@ import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FilmServiceImpl implements FilmService {
@@ -19,18 +21,17 @@ public class FilmServiceImpl implements FilmService {
     private final UserStorage userStorage;
 
     @Autowired
-    public FilmServiceImpl(FilmStorage filmStorage, UserStorage userStorage) {
+    public FilmServiceImpl(@Qualifier("FilmDbStorage") FilmStorage filmStorage, @Qualifier("UserDbStorage") UserStorage userStorage) {
         this.filmStorage = filmStorage;
         this.userStorage = userStorage;
     }
 
     @Override
-    public Film findFilmById(Long filmId) {
-        final Film film = filmStorage.findFilmById(filmId);
-        if (film == null) {
+    public Optional<Film> findFilmById(Long filmId) {
+        if (filmId < 1) {
             throw new NotFoundException("Film with id=" + filmId + " not found");
         }
-        return film;
+        return filmStorage.findFilmById(filmId);
     }
 
     @Override
@@ -43,12 +44,15 @@ public class FilmServiceImpl implements FilmService {
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             throw new BadRequestException("Дата не релиза не может быть раньше, чем 28 декабря 1895 года");
         }
+        if (film.getMpa() == null) {
+            throw new BadRequestException("Рейтинг должен быть задан");
+        }
         return filmStorage.addFilm(film);
     }
 
     @Override
     public Film updateFilm(Film film) {
-        if (filmStorage.findFilmById(film.getId()) == null) {
+        if (film.getId() < 1) {
             throw new NotFoundException("Film with id=" + film.getId() + " not found");
         }
         return filmStorage.updateFilm(film);
@@ -56,28 +60,28 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public void addLike(Long filmId, Long userId) {
-        Film film = filmStorage.findFilmById(filmId);
-        if (film == null) {
+        if (filmId < 1) {
             throw new NotFoundException("Film with id=" + filmId + " not found");
         }
-        User user = userStorage.findUserById(userId);
-        if (user == null) {
+        Optional<User> user = userStorage.findUserById(userId);
+        if (user.isPresent()) {
+            filmStorage.addLike(filmId, userId);
+        } else {
             throw new NotFoundException("User with id=" + userId + " not found");
         }
-        filmStorage.addLike(film, user);
     }
 
     @Override
     public void deleteLike(Long filmId, Long userId) {
-        Film film = filmStorage.findFilmById(filmId);
-        User user = userStorage.findUserById(userId);
-        if (film == null) {
+        if (filmId < 1) {
             throw new NotFoundException("Film with id=" + filmId + " not found");
         }
-        if (user == null) {
+        Optional<User> user = userStorage.findUserById(userId);
+        if (user.isPresent()) {
+            filmStorage.addLike(filmId, userId);
+        } else {
             throw new NotFoundException("User with id=" + userId + " not found");
         }
-        filmStorage.deleteLike(film, user);
     }
 
     @Override

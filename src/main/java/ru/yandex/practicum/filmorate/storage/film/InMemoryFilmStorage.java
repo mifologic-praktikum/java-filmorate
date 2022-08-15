@@ -14,8 +14,8 @@ public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Long, Film> films = new HashMap<>();
 
     @Override
-    public Film findFilmById(Long filmId) {
-        return films.get(filmId);
+    public Optional<Film> findFilmById(Long filmId) {
+        return Optional.ofNullable(films.get(filmId));
     }
 
     @Override
@@ -37,13 +37,13 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public void addLike(Film film, User user) {
-        film.getUsersLikes().add(user.getId());
+    public void addLike(Long filmId, Long userId) {
+        films.get(filmId).getUsersLikes().add(userId);
     }
 
     @Override
-    public void deleteLike(Film film, User user) {
-        film.getUsersLikes().remove(user.getId());
+    public void deleteLike(Long filmId, Long userId) {
+        films.get(filmId).getUsersLikes().remove(userId);
     }
 
     @Override

@@ -1,12 +1,15 @@
 package ru.yandex.practicum.filmorate.service.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -14,7 +17,7 @@ public class UserServiceImpl implements UserService {
     private final UserStorage userStorage;
 
     @Autowired
-    public UserServiceImpl(UserStorage userStorage) {
+    public UserServiceImpl(@Qualifier("UserDbStorage") UserStorage userStorage) {
         this.userStorage = userStorage;
     }
 
@@ -24,9 +27,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUserById(Long userId) {
-        final User user = userStorage.findUserById(userId);
-        if (user == null) {
+    public Optional<User> findUserById(Long userId) {
+        final Optional<User> user = userStorage.findUserById(userId);
+        if (user.isEmpty()) {
             throw new NotFoundException("User with id=" + userId + " not found");
         }
         return user;
@@ -42,7 +45,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(User user) {
-        if (userStorage.findUserById(user.getId()) == null) {
+        if (userStorage.findUserById(user.getId()).isEmpty()) {
             throw new NotFoundException("User with id=" + user.getId() + " not found");
         }
         return userStorage.updateUser(user);
@@ -50,26 +53,32 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addFriend(Long userId, Long friendId) {
-        User user = findUserById(userId);
-        User friend = findUserById(friendId);
-        userStorage.addFriend(user, friend);
+        if (userId < 1 || friendId < 1) {
+            throw new NotFoundException("User not found");
+        }
+        userStorage.addFriend(userId, friendId);
     }
 
     @Override
-    public void removeFriend(Long friendId, Long userId) {
-        User user = findUserById(userId);
-        User friend = findUserById(friendId);
-        userStorage.removeFriend(user, friend);
+    public void removeFriend(Long userId, Long friendId) {
+        Optional<User> user = findUserById(userId);
+        Optional<User> friend = findUserById(friendId);
+        if (user.isPresent() & friend.isPresent()) {
+            userStorage.removeFriend(userId, friendId);
+        }
     }
 
     @Override
-    public List<User> findUserFriends(Long userId) {
+    public Collection<User> findUserFriends(Long userId) {
+        if (userId < 1) {
+            throw new NotFoundException("User not found");
+        }
         return userStorage.findUserFriends(userId);
     }
 
     @Override
     public List<User> findCommonFriends(Long userId, Long otherUserId) {
-        if (userStorage.findUserById(userId) == null || userStorage.findUserById(otherUserId) == null) {
+        if (userStorage.findUserById(userId).isEmpty() || userStorage.findUserById(otherUserId).isEmpty()) {
             throw new NotFoundException("User not found");
         }
         return userStorage.findCommonFriends(userId, otherUserId);

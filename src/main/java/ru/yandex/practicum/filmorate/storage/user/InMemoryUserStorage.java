@@ -18,8 +18,8 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User findUserById(Long userId) {
-        return users.get(userId);
+    public Optional<User> findUserById(Long userId) {
+        return Optional.ofNullable(users.get(userId));
     }
 
     @Override
@@ -36,21 +36,21 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public void addFriend(User user, User friend) {
-        user.getFriends().add(friend.getId());
-        friend.getFriends().add(user.getId());
+    public void addFriend(Long userId, Long friendId) {
+        users.get(userId).getFriends().add(friendId);
+        users.get(userId).getFriends().add(userId);
     }
 
     @Override
-    public void removeFriend(User user, User friend) {
-        user.getFriends().remove(friend.getId());
-        friend.getFriends().remove(user.getId());
+    public void removeFriend(Long userId, Long friendId) {
+        users.get(userId).getFriends().remove(friendId);
+        users.get(friendId).getFriends().remove(userId);
     }
 
     @Override
-    public List<User> findUserFriends(Long userId) {
+    public Collection<User> findUserFriends(Long userId) {
         Set<Long> friendsIds = users.get(userId).getFriends();
-        List<User> friends = new ArrayList<>();
+        Collection<User> friends = new HashSet<>();
         for (Long id : friendsIds) {
             friends.add(users.get(id));
         }
