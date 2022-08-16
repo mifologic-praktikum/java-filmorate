@@ -3,10 +3,11 @@ package ru.yandex.practicum.filmorate.service.film;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FilmService {
 
-    public Film findFilmById(Long filmId);
+    public Optional<Film> findFilmById(Long filmId);
 
     public List<Film> findAllFilms();
 

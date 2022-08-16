@@ -4,10 +4,11 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FilmStorage {
 
-    public Film findFilmById(Long filmId);
+    public Optional<Film> findFilmById(Long filmId);
 
     public List<Film> findAllFilms();
 
@@ -15,9 +16,9 @@ public interface FilmStorage {
 
     public Film updateFilm(Film film);
 
-    public void addLike(Film film, User user);
+    void setFilmGenre(Film film);
 
-    public void deleteLike(Film film, User user);
+    void loadFilmGenre(Film film);
 
     public List<Film> findTopFilmsCountByLikes(int count);
 
