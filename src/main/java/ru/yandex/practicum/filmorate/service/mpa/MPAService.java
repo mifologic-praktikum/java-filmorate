@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface MPAService {
 
-    public Optional<MPA> findRatingById(Long id);
+    public Optional<MPA> findRatingById(long id);
 
     public List<MPA> findAllRatings();
 }

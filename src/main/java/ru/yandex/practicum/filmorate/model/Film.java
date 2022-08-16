@@ -15,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Film {
-    private Long id;
+    private long id;
     @NotBlank
     private String name;
     @Size(max = 200)
@@ -24,10 +24,10 @@ public class Film {
     @Positive
     private double duration;
     private MPA mpa;
-    private Set<Long> usersLikes;
+    private Set<long> usersLikes;
     private Set<Genre> genres;
 
-    public Film(Long id, String name, String description, LocalDate releaseDate, double duration, MPA mpa) {
+    public Film(long id, String name, String description, LocalDate releaseDate, double duration, MPA mpa) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -35,7 +35,7 @@ public class Film {
         this.duration = duration;
         this.mpa = mpa;
     }
-    public Film(Long id, String name, String description, LocalDate releaseDate, double duration, MPA mpa, Set<Genre> genres) {
+    public Film(long id, String name, String description, LocalDate releaseDate, double duration, MPA mpa, Set<Genre> genres) {
         this.id = id;
         this.name = name;
         this.description = description;

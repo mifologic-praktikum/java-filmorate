@@ -32,7 +32,7 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public Optional<Film> findFilmById(Long filmId) {
+    public Optional<Film> findFilmById(long filmId) {
         if (filmId < 1) {
             throw new NotFoundException("Film with id=" + filmId + " not found");
         }
@@ -64,7 +64,7 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public void addLike(Long filmId, Long userId) {
+    public void addLike(long filmId, long userId) {
         if (filmId < 1) {
             throw new NotFoundException("Film with id=" + filmId + " not found");
         }
@@ -77,7 +77,7 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public void deleteLike(Long filmId, Long userId) {
+    public void deleteLike(long filmId, long userId) {
         if (filmId < 1) {
             throw new NotFoundException("Film with id=" + filmId + " not found");
         }

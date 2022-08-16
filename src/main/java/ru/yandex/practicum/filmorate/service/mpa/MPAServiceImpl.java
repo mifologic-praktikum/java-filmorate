@@ -19,7 +19,7 @@ public class MPAServiceImpl implements MPAService {
     }
 
     @Override
-    public Optional<MPA> findRatingById(Long ratingId) {
+    public Optional<MPA> findRatingById(long ratingId) {
         Optional<MPA> mpaRating = mpaStorage.findRatingById(ratingId);
         if (mpaRating.isEmpty() || ratingId < 1) {
             throw new NotFoundException("MPA with ratingId=" + ratingId + " not found");

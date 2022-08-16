@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface FilmService {
 
-    public Optional<Film> findFilmById(Long filmId);
+    public Optional<Film> findFilmById(long filmId);
 
     public List<Film> findAllFilms();
 
@@ -15,9 +15,9 @@ public interface FilmService {
 
     public Film updateFilm(Film film);
 
-    public void addLike(Long filmId, Long userId);
+    public void addLike(long filmId, long userId);
 
-    public void deleteLike(Long filmId, Long userId);
+    public void deleteLike(long filmId, long userId);
 
     public List<Film> findTopFilmsCountByLikes(int count);
 }

@@ -23,7 +23,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public Optional<Film> findFilmById(Long filmId) {
+    public Optional<Film> findFilmById(long filmId) {
         final String sqlQuery = "SELECT F.FILM_ID, F.NAME, F.DESCRIPTION, F.RELEASE_DATE, F.DURATION, M.RATING_ID, M.NAME FROM FILMS AS F " +
                 "JOIN MPA_RATINGS M ON F.MPA_RATING = M.RATING_ID WHERE FILM_ID = ?";
         final List<Film> films = jdbcTemplate.query(sqlQuery, FilmDbStorage::makeFilm, filmId);
@@ -68,7 +68,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public void setFilmGenre(Film film) {
-        Long filmId = film.getId();
+        long filmId = film.getId();
         String sqlQuery = "DELETE FROM FILM_GENRES WHERE FILM_ID = ?";
         jdbcTemplate.update(sqlQuery, filmId);
         if (film.getGenres() == null || film.getGenres().isEmpty()) {

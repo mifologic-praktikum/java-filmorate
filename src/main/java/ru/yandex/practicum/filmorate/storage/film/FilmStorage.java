@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface FilmStorage {
 
-    public Optional<Film> findFilmById(Long filmId);
+    public Optional<Film> findFilmById(long filmId);
 
     public List<Film> findAllFilms();
 

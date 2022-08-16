@@ -21,13 +21,13 @@ public class GenreDbStorage implements GenreStorage {
     }
 
     @Override
-    public Optional<Genre> findGenreById(Long id) {
+    public Optional<Genre> findGenreById(long id) {
         String sqlQuery = "SELECT GENRE_ID, NAME FROM GENRES WHERE GENRE_ID = ?";
         SqlRowSet rs = jdbcTemplate.queryForRowSet(
                 sqlQuery, id);
         if (rs.next()) {
             return Optional.of(new Genre(
-                    rs.getLong("GENRE_ID"),
+                    rs.getlong("GENRE_ID"),
                     rs.getString("NAME")));
         }
         return Optional.empty();
@@ -41,7 +41,7 @@ public class GenreDbStorage implements GenreStorage {
 
     private Genre mapRowToGenre(ResultSet resultSet, int rowNumber) throws SQLException {
         return new Genre(
-                resultSet.getLong("GENRE_ID"),
+                resultSet.getlong("GENRE_ID"),
                 resultSet.getString("NAME"));
     }
 }

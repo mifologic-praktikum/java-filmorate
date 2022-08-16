@@ -29,11 +29,11 @@ public class UserDbStorage implements UserStorage {
     }
 
     @Override
-    public Optional<User> findUserById(Long userId) {
+    public Optional<User> findUserById(long userId) {
         final String sqlQuery = "SELECT * FROM USERS WHERE USER_ID = ?";
         SqlRowSet rs = jdbcTemplate.queryForRowSet(sqlQuery, userId);
         if (rs.next()) {
-            User user = new User(rs.getLong("USER_ID"),
+            User user = new User(rs.getlong("USER_ID"),
                     rs.getString("EMAIL"),
                     rs.getString("LOGIN"),
                     rs.getString("NAME"),
@@ -66,24 +66,24 @@ public class UserDbStorage implements UserStorage {
     }
 
     @Override
-    public void addFriend(Long userId, Long friendId) {
+    public void addFriend(long userId, long friendId) {
         String sqlQuery = "INSERT INTO USER_FRIENDS (USER_ID, FRIEND_ID) VALUES (?, ?)";
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sqlQuery);
-            stmt.setLong(1, userId);
-            stmt.setLong(2, friendId);
+            stmt.setlong(1, userId);
+            stmt.setlong(2, friendId);
             return stmt;
         });
     }
 
     @Override
-    public void removeFriend(Long userId, Long friendId) {
+    public void removeFriend(long userId, long friendId) {
         String sqlQuery = "DELETE FROM USER_FRIENDS WHERE USER_ID = ? AND  FRIEND_ID = ?";
         jdbcTemplate.update(sqlQuery, userId, friendId);
     }
 
     @Override
-    public Collection<User> findUserFriends(Long userId) {
+    public Collection<User> findUserFriends(long userId) {
         final String sqlQuery = "SELECT U.USER_ID, U.EMAIL, U.LOGIN, U.NAME, U.BIRTHDAY FROM USERS U " +
                 "JOIN USER_FRIENDS UF on U.USER_ID = UF.FRIEND_ID " +
                 "WHERE UF.USER_ID = ?";
@@ -91,7 +91,7 @@ public class UserDbStorage implements UserStorage {
     }
 
     @Override
-    public List<User> findCommonFriends(Long userId, Long otherUserId) {
+    public List<User> findCommonFriends(long userId, long otherUserId) {
         final String sqlQuery = "SELECT U.USER_ID, U.EMAIL, U.LOGIN, U.NAME, U.BIRTHDAY From USERS U " +
                 "WHERE USER_ID IN (SELECT FRIEND_ID FROM USER_FRIENDS UF  where UF.USER_ID = ?) " +
                 "AND USER_ID IN (SELECT FRIEND_ID FROM USER_FRIENDS UF2  where UF2.USER_ID = ?)";
@@ -109,7 +109,7 @@ public class UserDbStorage implements UserStorage {
 
     private User makeUser(ResultSet rs) throws SQLException {
         return new User(
-                rs.getLong("USER_ID"),
+                rs.getlong("USER_ID"),
                 rs.getString("EMAIL"),
                 rs.getString("LOGIN"),
                 rs.getString("NAME"),

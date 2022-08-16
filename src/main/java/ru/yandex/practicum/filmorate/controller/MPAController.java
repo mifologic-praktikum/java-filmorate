@@ -30,7 +30,7 @@ public class MPAController {
     }
 
     @GetMapping("/{ratingId}")
-    public Optional<MPA> findRatingById(@PathVariable Long ratingId) {
+    public Optional<MPA> findRatingById(@PathVariable long ratingId) {
         return mpaService.findRatingById(ratingId);
     }
 

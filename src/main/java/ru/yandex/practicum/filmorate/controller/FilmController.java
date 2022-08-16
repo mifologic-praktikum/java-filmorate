@@ -33,7 +33,7 @@ public class FilmController implements DataValidation<Film> {
     }
 
     @GetMapping("/{filmId}")
-    public Optional<Film> findFilmById(@PathVariable Long filmId) {
+    public Optional<Film> findFilmById(@PathVariable long filmId) {
         return filmService.findFilmById(filmId);
     }
 
@@ -50,13 +50,13 @@ public class FilmController implements DataValidation<Film> {
     }
 
     @PutMapping("/{filmId}/like/{userId}")
-    public void addLike(@PathVariable Long filmId, @PathVariable Long userId) {
+    public void addLike(@PathVariable long filmId, @PathVariable long userId) {
         log.info("Add like for film with id=" + filmId);
         filmService.addLike(filmId, userId);
     }
 
     @DeleteMapping("/{filmId}/like/{userId}")
-    public void deleteLike(@PathVariable Long filmId, @PathVariable Long userId) {
+    public void deleteLike(@PathVariable long filmId, @PathVariable long userId) {
         log.info("Delete like for film with id=" + filmId);
         filmService.deleteLike(filmId, userId);
     }

@@ -20,7 +20,7 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public Optional<Genre> findGenreById(Long genreId) {
+    public Optional<Genre> findGenreById(long genreId) {
         Optional<Genre> genre = genreStorage.findGenreById(genreId);
         if (genre.isEmpty()) {
             throw new NotFoundException("Genre with genreId=" + genreId + " not found");

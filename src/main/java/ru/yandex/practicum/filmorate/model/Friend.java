@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Friend {
 
-    private Long userId;
-    private  Long friendId;
+    private long userId;
+    private  long friendId;
     private boolean friendShipStatus;
 }

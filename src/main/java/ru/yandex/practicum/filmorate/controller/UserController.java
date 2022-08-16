@@ -34,7 +34,7 @@ public class UserController implements DataValidation<User> {
     }
 
     @GetMapping("/{userId}")
-    public Optional<User> findUserById(@PathVariable Long userId) {
+    public Optional<User> findUserById(@PathVariable long userId) {
         log.info("Get user by id={}", userId);
         return userService.findUserById(userId);
     }
@@ -52,25 +52,25 @@ public class UserController implements DataValidation<User> {
     }
 
     @PutMapping("/{userId}/friends/{friendId}")
-    public void addFriend(@PathVariable Long userId, @PathVariable Long friendId) {
+    public void addFriend(@PathVariable long userId, @PathVariable long friendId) {
         log.info("Add friend with id=" + friendId + " to user with id=" + userId);
         userService.addFriend(userId, friendId);
     }
 
     @DeleteMapping("/{userId}/friends/{friendId}")
-    public void deleteFriend(@PathVariable Long userId, @PathVariable Long friendId) {
+    public void deleteFriend(@PathVariable long userId, @PathVariable long friendId) {
         log.info("Delete friend with id=" + friendId + " from user with id=" + userId);
         userService.removeFriend(userId, friendId);
     }
 
     @GetMapping("/{userId}/friends")
-    public Collection<User> findUserFriends(@PathVariable Long userId) {
+    public Collection<User> findUserFriends(@PathVariable long userId) {
         log.info("Find friends for user with id=" + userId);
         return userService.findUserFriends(userId);
     }
 
     @GetMapping("/{userId}/friends/common/{otherUserId}")
-    public List<User> findCommonFriends(@PathVariable Long userId, @PathVariable Long otherUserId) {
+    public List<User> findCommonFriends(@PathVariable long userId, @PathVariable long otherUserId) {
         log.info("Find common friends for users with ids=" + userId + ", " + otherUserId);
         return userService.findCommonFriends(userId, otherUserId);
     }

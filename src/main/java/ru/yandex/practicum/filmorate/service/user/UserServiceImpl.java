@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findUserById(Long userId) {
+    public Optional<User> findUserById(long userId) {
         final Optional<User> user = userStorage.findUserById(userId);
         if (user.isEmpty()) {
             throw new NotFoundException("User with id=" + userId + " not found");
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addFriend(Long userId, Long friendId) {
+    public void addFriend(long userId, long friendId) {
         if (userId < 1 || friendId < 1) {
             throw new NotFoundException("User not found");
         }
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void removeFriend(Long userId, Long friendId) {
+    public void removeFriend(long userId, long friendId) {
         Optional<User> user = findUserById(userId);
         Optional<User> friend = findUserById(friendId);
         if (user.isPresent() & friend.isPresent()) {
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Collection<User> findUserFriends(Long userId) {
+    public Collection<User> findUserFriends(long userId) {
         if (userId < 1) {
             throw new NotFoundException("User not found");
         }
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findCommonFriends(Long userId, Long otherUserId) {
+    public List<User> findCommonFriends(long userId, long otherUserId) {
         if (userStorage.findUserById(userId).isEmpty() || userStorage.findUserById(otherUserId).isEmpty()) {
             throw new NotFoundException("User not found");
         }

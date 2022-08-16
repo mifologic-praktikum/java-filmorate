@@ -10,18 +10,18 @@ public interface UserService {
 
     public List<User> findUsers();
 
-    public Optional<User> findUserById(Long userId);
+    public Optional<User> findUserById(long userId);
 
     public User addUser(User user);
 
     public User updateUser(User user);
 
-    public void addFriend(Long userId, Long friendId);
+    public void addFriend(long userId, long friendId);
 
-    public void removeFriend(Long userId, Long friendId);
+    public void removeFriend(long userId, long friendId);
 
-    public Collection<User> findUserFriends(Long userId);
+    public Collection<User> findUserFriends(long userId);
 
-    public List<User> findCommonFriends(Long userId, Long otherUserId);
+    public List<User> findCommonFriends(long userId, long otherUserId);
 
 }

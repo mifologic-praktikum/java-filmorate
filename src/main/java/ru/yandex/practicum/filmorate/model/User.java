@@ -13,7 +13,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 public class User {
-    private Long id;
+    private long id;
     @Email
     @NotNull
     private String email;
@@ -24,9 +24,9 @@ public class User {
     @PastOrPresent
     private LocalDate birthday;
     @JsonIgnore
-    private Set<Long> friends = new HashSet<>();
+    private Set<long> friends = new HashSet<>();
 
-    public User(Long id, String email, String login, String name, LocalDate birthday) {
+    public User(long id, String email, String login, String name, LocalDate birthday) {
         this.id = id;
         this.email = email;
         this.login = login;

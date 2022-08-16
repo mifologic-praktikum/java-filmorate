@@ -21,12 +21,12 @@ public class MPADbStorage implements MPAStorage {
     }
 
     @Override
-    public Optional<MPA> findRatingById(Long id) {
+    public Optional<MPA> findRatingById(long id) {
         String sqlQuery = "SELECT RATING_ID, NAME FROM MPA_RATINGS WHERE RATING_ID = ?";
         SqlRowSet rs = jdbcTemplate.queryForRowSet(sqlQuery, id);
         if (rs.next()) {
             return Optional.of(new MPA(
-                    rs.getLong("RATING_ID"),
+                    rs.getlong("RATING_ID"),
                     rs.getString("NAME")));
         }
         return Optional.empty();
