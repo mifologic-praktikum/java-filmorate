@@ -26,7 +26,7 @@ public class MPADbStorage implements MPAStorage {
         SqlRowSet rs = jdbcTemplate.queryForRowSet(sqlQuery, id);
         if (rs.next()) {
             return Optional.of(new MPA(
-                    rs.getlong("RATING_ID"),
+                    rs.getLong("RATING_ID"),
                     rs.getString("NAME")));
         }
         return Optional.empty();

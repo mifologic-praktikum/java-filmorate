@@ -33,7 +33,7 @@ public class UserDbStorage implements UserStorage {
         final String sqlQuery = "SELECT * FROM USERS WHERE USER_ID = ?";
         SqlRowSet rs = jdbcTemplate.queryForRowSet(sqlQuery, userId);
         if (rs.next()) {
-            User user = new User(rs.getlong("USER_ID"),
+            User user = new User(rs.getLong("USER_ID"),
                     rs.getString("EMAIL"),
                     rs.getString("LOGIN"),
                     rs.getString("NAME"),
@@ -70,8 +70,8 @@ public class UserDbStorage implements UserStorage {
         String sqlQuery = "INSERT INTO USER_FRIENDS (USER_ID, FRIEND_ID) VALUES (?, ?)";
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sqlQuery);
-            stmt.setlong(1, userId);
-            stmt.setlong(2, friendId);
+            stmt.setLong(1, userId);
+            stmt.setLong(2, friendId);
             return stmt;
         });
     }
@@ -109,7 +109,7 @@ public class UserDbStorage implements UserStorage {
 
     private User makeUser(ResultSet rs) throws SQLException {
         return new User(
-                rs.getlong("USER_ID"),
+                rs.getLong("USER_ID"),
                 rs.getString("EMAIL"),
                 rs.getString("LOGIN"),
                 rs.getString("NAME"),

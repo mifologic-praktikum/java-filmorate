@@ -19,8 +19,8 @@ public class LikeDbStorage implements LikeStorage {
         String sqlQuery = "INSERT INTO LIKES (FILM_ID, USER_ID) VALUES (?, ?)";
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sqlQuery);
-            stmt.setlong(1, filmId);
-            stmt.setlong(2, userId);
+            stmt.setLong(1, filmId);
+            stmt.setLong(2, userId);
             return stmt;
         });
     }

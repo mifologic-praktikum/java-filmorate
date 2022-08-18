@@ -27,7 +27,7 @@ public class GenreDbStorage implements GenreStorage {
                 sqlQuery, id);
         if (rs.next()) {
             return Optional.of(new Genre(
-                    rs.getlong("GENRE_ID"),
+                    rs.getLong("GENRE_ID"),
                     rs.getString("NAME")));
         }
         return Optional.empty();
@@ -41,7 +41,7 @@ public class GenreDbStorage implements GenreStorage {
 
     private Genre mapRowToGenre(ResultSet resultSet, int rowNumber) throws SQLException {
         return new Genre(
-                resultSet.getlong("GENRE_ID"),
+                resultSet.getLong("GENRE_ID"),
                 resultSet.getString("NAME"));
     }
 }

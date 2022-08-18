@@ -24,7 +24,7 @@ public class User {
     @PastOrPresent
     private LocalDate birthday;
     @JsonIgnore
-    private Set<long> friends = new HashSet<>();
+    private Set<Long> friends = new HashSet<>();
 
     public User(long id, String email, String login, String name, LocalDate birthday) {
         this.id = id;
